@@ -1,31 +1,9 @@
-
 def ProcessVideoForEyes(video_link = None,
-                        download = True,
-                        storage_path = None,
-                        model_path = None,
-                        output_Video_folder = None,
-                        output_Name = None,
-                        collab = False,
-                        local_machine = True,
-                        display_output = True):
+                        model_path = None,):
     """
     this function creates all the things required for the 
     Processig of Eyes in a Frame
-    """
-    if download and video_link:
-
-        ydl_opts = {}
-
-        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            info_dict = ydl.extract_info(video_link, download=False)
-            video_title = info_dict.get('title', None)
-
-        video_path = storage_path + str(video_title)
-
-        ydl_opts.update({'outtmpl':video_path})
-
-        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([video_link])
+    """   
             
     
     def eye_aspect_ratio(eye):
@@ -67,18 +45,23 @@ def ProcessVideoForEyes(video_link = None,
     (lStart, lEnd) = face_utils.FACIAL_LANDMARKS_IDXS["left_eye"]
     (rStart, rEnd) = face_utils.FACIAL_LANDMARKS_IDXS["right_eye"]
 
-    cap = cv2.VideoCapture(video_path)
 
-    if (output_Video_folder and output_Name):
-        result = cv2.VideoWriter(output_Video_folder + output_Name,  
-                                cv2.VideoWriter_fourcc(*'MJPG'), 
-                                10, (640,360))
+    url = video_link
+    vPafy = pafy.new(url)
+    play = vPafy.getbest()
+
+    cap = cv2.VideoCapture(play.url)
+    result = cv2.VideoWriter( "processed_video.avi",  
+                              cv2.VideoWriter_fourcc(*'MJPG'), 
+                              10, (640,360))
 
     # Check if camera opened successfully
     if (cap.isOpened() == False):
         print("Error opening video stream or file")
 
     # Read until video is completed
+    print(" PROCESSING THE VIDEO NOW ...")
+    print(" PLEASE WAIT.....")
     while (cap.isOpened()):
         # Capture frame-by-frame
         ret, frame = cap.read()
@@ -100,9 +83,6 @@ def ProcessVideoForEyes(video_link = None,
                 leftEAR = eye_aspect_ratio(leftEye)
                 rightEAR = eye_aspect_ratio(rightEye)
 
-                print(leftEAR, rightEAR)
-                print(rightEye)
-                print(leftEye)
                 # average the eye aspect ratio together for both eyes
                 ear = (leftEAR + rightEAR) / 2.0
 
@@ -132,25 +112,7 @@ def ProcessVideoForEyes(video_link = None,
                             cv2.FONT_HERSHEY_SIMPLEX, 0.7, (50, 0, 255), 2)
                 cv2.putText(frame, "EAR: {:.2f}".format(ear), (300, 30),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.7, (50, 0, 255), 2)
-
-            # show the frame
-            if display_output and collab:
-                cv2_imshow(frame)
-            elif display_output:
-                cv2.imshow('frame',frame)    
-
-            try:
-                result.write(frame)
-            except:
-                pass    
-
-            key = cv2.waitKey(1) & 0xFF
-            if display_output and collab:
-                clear_output(wait=True)
-
-            # Press Q on keyboard to  exit
-            if cv2.waitKey(25) & 0xFF == ord('q'):
-                break
+            result.write(frame) 
 
         # Break the loop
         else:
@@ -159,16 +121,13 @@ def ProcessVideoForEyes(video_link = None,
     # When everything done, release the video capture object
     cap.release()
     result.release()
-    # Closes all the frames
-    if display_output:
-        cv2.destroyAllWindows()
+    print("video is available and named as \"something.avi\" ")
 
         
 if __name__ == "__main__":
     
 
-    print("-----Importing--required--modules---")
-    from IPython.display import clear_output
+    print("----- Importing--required--modules ----- \n")
     from scipy.spatial import distance as dist
     print("----Imported-functions-from-Scipy-")
     from imutils.video import FileVideoStream
@@ -188,15 +147,14 @@ if __name__ == "__main__":
     print("----Imported-functions-for-downloading-videos-")   
     import pafy
     print("----Imported-functions-from-pafy-")
-    
-    print('\n\n\n\n\n\n preparing and executing the model')
-    ProcessVideoForEyes(video_link = "https://www.youtube.com/watch?v=wlJBR4aARSk",
-                        download = True,
-                        storage_path = "./",
-                        model_path = "./truck-driver-protection/shape_predictor_68_face_landmarks.dat",
-                        output_Video_folder = "./",
-                        output_Name = "output_video",
-                        collab = False,
-                        local_machine = True,
-                        display_output = False)
+    import argparse
+
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('--weblink', required=True)
+    args = parser.parse_args()
+    print('\n Preparing and Executing the Model')
+
+    ProcessVideoForEyes(video_link = args.weblink,
+                        model_path = "./truck-driver-protection/shape_predictor_68_face_landmarks.dat")
         
