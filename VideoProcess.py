@@ -121,7 +121,7 @@ def ProcessVideoForEyes(video_link = None,
     # When everything done, release the video capture object
     cap.release()
     result.release()
-    print("video is available and named as \"something.avi\" ")
+    print("video is available and named as \"processed_video.avi\" ")
 
         
 if __name__ == "__main__":
