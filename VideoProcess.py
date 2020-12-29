@@ -180,44 +180,15 @@ if __name__ == "__main__":
     import imutils
     import time
     print("----Imported-functions-from-time-")
-    try:
-        import dlib
-    except:
-        print("*\* dlib not found......")
-        print("*\* Installing dlib now....")
-        !pip install dlib
-        import dlib
-        print("*/* dlib imported")   
-
-    try:     
-        import cv2
-    except:
-        print("*\* opencv  not found......")
-        print("*\* Installing opencv now....")
-        !pip install opencv-python
-        import cv2
-        print("*/* opencv imported")   ......")
-
-    try:
-        import youtube_dl
-    except:    
-        print("*\* youtube_dl  not found......")
-        print("*\* Installing youtube_dl now....")
-        !pip install youtube_dl
-        import youtube_dl
-        print("*/* youtube_dl imported")   
-
-    try:    
-        import pafy
-    except:    
-        print("*\* pafy  not found......")
-        print("*\* Installing pafy now....")
-        !pip install pafy
-        import pafy
-        print("*/* pafy imported")   
-
-
-
+    import dlib
+    print("----Imported-functions-from-dlib-")
+    import cv2
+    print("----Imported-functions-from-opencv-")
+    import youtube_dl
+    print("----Imported-functions-for-downloading-videos-")   
+    import pafy
+    print("----Imported-functions-from-pafy-")
+    
     print('\n\n\n\n\n\n preparing and executing the model')
     ProcessVideoForEyes(video_link = "https://www.youtube.com/watch?v=wlJBR4aARSk",
                         download = True,
