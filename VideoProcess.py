@@ -122,49 +122,49 @@ def ProcessVideoForEyes(video_link    = None,
                         now = datetime.now()
                         current_time = now.strftime("%H:%M:%S")
 
-                        data['Time'] = current_time
-                        data['ear_threshhold'] = EYE_AR_THRESH
-                        data['l_ear'] = leftEAR
-                        data['r_ear'] = rightEAR
+                        data['Time'] = [current_time]
+                        data['ear_threshhold'] = [EYE_AR_THRESH]
+                        data['l_ear'] = [leftEAR]
+                        data['r_ear'] = [rightEAR]
 
-                        data['l_d15'] = ld15
-                        data['l_d24'] = ld24
-                        data['l_d03'] = ld03
+                        data['l_d15'] = [ld15]
+                        data['l_d24'] = [ld24]
+                        data['l_d03'] = [ld03]
 
-                        data['r_d15'] = rd15
-                        data['r_d24'] = rd24
-                        data['r_d03'] = rd03
+                        data['r_d15'] = [rd15]
+                        data['r_d24'] = [rd24]
+                        data['r_d03'] = [rd03]
                         
-                        data['Average_ear'] = ear
-                        data['blink']       = 1
+                        data['Average_ear'] = [ear]
+                        data['blink']       = [1]
                         ####################################
 
                     COUNTER += 1
                 # otherwise, the eye aspect ratio is not below the blink
                 # threshold
                 else:
-                     if collect_data:
+                    if collect_data:
                         #########  Subject To change #######
                         data = {}
 
                         now = datetime.now()
                         current_time = now.strftime("%H:%M:%S")
 
-                        data['Time'] = current_time
-                        data['ear_threshhold'] = EYE_AR_THRESH
-                        data['l_ear'] = leftEAR
-                        data['r_ear'] = rightEAR
+                        data['Time'] = [current_time]
+                        data['ear_threshhold'] = [EYE_AR_THRESH]
+                        data['l_ear'] = [leftEAR]
+                        data['r_ear'] = [rightEAR]
 
-                        data['l_d15'] = ld15
-                        data['l_d24'] = ld24
-                        data['l_d03'] = ld03
+                        data['l_d15'] = [ld15]
+                        data['l_d24'] = [ld24]
+                        data['l_d03'] = [ld03]
 
-                        data['r_d15'] = rd15
-                        data['r_d24'] = rd24
-                        data['r_d03'] = rd03
+                        data['r_d15'] = [rd15]
+                        data['r_d24'] = [rd24]
+                        data['r_d03'] = [rd03]
                         
-                        data['Average_ear'] = ear
-                        data['blink']       = 0
+                        data['Average_ear'] = [ear]
+                        data['blink']       = [0]
                         ####################################
                     # if the eyes were closed for a sufficient number of
                     # then increment the total number of blinks
