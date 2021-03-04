@@ -148,7 +148,7 @@ def ProcessVideoForEyes(video_link    = None,
                         data = {}
 
                         now = datetime.now()
-                        current_time = now.strftime("%H:%M:%S")
+                        current_time = now.strftime("%m/%d/%Y, %H:%M:%S")
 
                         data['Time'] = [current_time]
                         data['ear_threshhold'] = [EYE_AR_THRESH]
