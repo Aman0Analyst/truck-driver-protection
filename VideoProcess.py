@@ -1,13 +1,22 @@
-def ProcessVideoForEyes(video_link = None,
-                        model_path = None,):
-    """
-    this function creates all the things required for the 
-    Processig of Eyes in a Frame
-    """   
-            
-    
-    def eye_aspect_ratio(eye):
+from IPython.display import clear_output
+from google.colab.patches import cv2_imshow
+from scipy.spatial import distance as dist
+from imutils.video import FileVideoStream
+from imutils.video import VideoStream
+from imutils import face_utils
+import numpy as np
+import imutils
+import time
+import dlib
+import cv2
+import youtube_dl
+import pafy
+import pandas as pd
+from datetime import datetime
 
+
+def eye_aspect_ratio(eye):
+        data = {}
         # compute the euclidean distances between the two sets of
         # vertical eye landmarks (x, y)-coordinates
         A = dist.euclidean(eye[1], eye[5])
@@ -18,8 +27,16 @@ def ProcessVideoForEyes(video_link = None,
         # compute the eye aspect ratio
         ear = (A + B) / (2.0 * C)
         # return the eye aspect ratio
-        return ear
-    
+        return ear,A,B,C
+
+def ProcessVideoForEyes(video_link    = None,
+                        model_path    = None,
+                        collect_data  = False,
+                        new_dataframe = pd.DataFrame()):
+    """
+    this function creates all the things required for the 
+    Processig of Eyes in a Frame
+    """ 
     
     # define two constants, one for the eye aspect ratio to indicate
     # blink and then a second constant for the number of consecutive
@@ -80,11 +97,13 @@ def ProcessVideoForEyes(video_link = None,
                 # coordinates to compute the eye aspect ratio for both eyes
                 leftEye = shape[lStart:lEnd]
                 rightEye = shape[rStart:rEnd]
-                leftEAR = eye_aspect_ratio(leftEye)
-                rightEAR = eye_aspect_ratio(rightEye)
+                leftEAR,ld15,ld24,ld03 = eye_aspect_ratio(leftEye)
+                rightEAR,rd15,rd24,rd03 = eye_aspect_ratio(rightEye)
+
 
                 # average the eye aspect ratio together for both eyes
                 ear = (leftEAR + rightEAR) / 2.0
+
 
                 # compute the convex hull for the left and right eye, then
                 # visualize each of the eyes
@@ -95,10 +114,58 @@ def ProcessVideoForEyes(video_link = None,
                 # check to see if the eye aspect ratio is below the blink
                 # threshold, and if so, increment the blink frame counter
                 if ear < EYE_AR_THRESH:
+                    
+                    if collect_data:
+                        #########  Subject To change #######
+                        data = {}
+
+                        now = datetime.now()
+                        current_time = now.strftime("%H:%M:%S")
+
+                        data['Time'] = current_time
+                        data['ear_threshhold'] = EYE_AR_THRESH
+                        data['l_ear'] = leftEAR
+                        data['r_ear'] = rightEAR
+
+                        data['l_d15'] = ld15
+                        data['l_d24'] = ld24
+                        data['l_d03'] = ld03
+
+                        data['r_d15'] = rd15
+                        data['r_d24'] = rd24
+                        data['r_d03'] = rd03
+                        
+                        data['Average_ear'] = ear
+                        data['blink']       = 1
+                        ####################################
+
                     COUNTER += 1
                 # otherwise, the eye aspect ratio is not below the blink
                 # threshold
                 else:
+                     if collect_data:
+                        #########  Subject To change #######
+                        data = {}
+
+                        now = datetime.now()
+                        current_time = now.strftime("%H:%M:%S")
+
+                        data['Time'] = current_time
+                        data['ear_threshhold'] = EYE_AR_THRESH
+                        data['l_ear'] = leftEAR
+                        data['r_ear'] = rightEAR
+
+                        data['l_d15'] = ld15
+                        data['l_d24'] = ld24
+                        data['l_d03'] = ld03
+
+                        data['r_d15'] = rd15
+                        data['r_d24'] = rd24
+                        data['r_d03'] = rd03
+                        
+                        data['Average_ear'] = ear
+                        data['blink']       = 0
+                        ####################################
                     # if the eyes were closed for a sufficient number of
                     # then increment the total number of blinks
                     if COUNTER >= EYE_AR_CONSEC_FRAMES:
@@ -112,6 +179,7 @@ def ProcessVideoForEyes(video_link = None,
                             cv2.FONT_HERSHEY_SIMPLEX, 0.7, (50, 0, 255), 2)
                 cv2.putText(frame, "EAR: {:.2f}".format(ear), (300, 30),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.7, (50, 0, 255), 2)
+                new_dataframe = new_dataframe.append(pd.DataFrame(data))
             result.write(frame) 
 
         # Break the loop
@@ -122,6 +190,7 @@ def ProcessVideoForEyes(video_link = None,
     cap.release()
     result.release()
     print("video is available and named as \"processed_video.avi\" ")
+    return new_dataframe
 
         
 if __name__ == "__main__":
