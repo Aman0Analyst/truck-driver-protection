@@ -31,6 +31,7 @@ def eye_aspect_ratio(eye):
 
 def ProcessVideoForEyes(video_link    = None,
                         model_path    = None,
+                        collect_data  = False,
                         new_dataframe = pd.DataFrame()):
     """
     this function creates all the things required for the 
