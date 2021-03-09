@@ -187,9 +187,9 @@ def ProcessVideoForEyes(video_link    = None,
 
                 if ear > 0.15:
                     if E1 > E2:
-                        cv2.putText(frame,"ACTIVE DRIVER",(10,100))
+                        cv2.putText(frame,"ACTIVE DRIVER",(10,100),cv2.FONT_HERSHEY_SIMPLEX, 0.7, (50, 0, 255), 2)
                     if E2 >= E1:
-                        cv2.putText(frame,f"DIZZY DRIVER : {E2}",(10,100))    
+                        cv2.putText(frame,f"DIZZY DRIVER : {E2}",(10,100),cv2.FONT_HERSHEY_SIMPLEX, 0.7, (50, 0, 255), 2)    
                     # cv2.putText(frame, "Blinks: {}".format(TOTAL), (10, 30),
                     #             cv2.FONT_HERSHEY_SIMPLEX, 0.7, (50, 0, 255), 2)
                     cv2.putText(frame, "EAR: {:.2f}".format(ear), (300, 30),
