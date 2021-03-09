@@ -173,6 +173,7 @@ def ProcessVideoForEyes(video_link    = None,
                         
                         data['Average_ear'] = [ear]
                         data['blink']       = [0]
+                        new_dataframe = new_dataframe.append(pd.DataFrame(data))
                         ####################################
                     # if the eyes were closed for a sufficient number of
                     # then increment the total number of blinks
@@ -194,7 +195,6 @@ def ProcessVideoForEyes(video_link    = None,
                     #             cv2.FONT_HERSHEY_SIMPLEX, 0.7, (50, 0, 255), 2)
                     cv2.putText(frame, "EAR: {:.2f}".format(ear), (300, 30),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.7, (50, 0, 255), 2)
-                    new_dataframe = new_dataframe.append(pd.DataFrame(data))
             result.write(frame) 
 
         # Break the loop
