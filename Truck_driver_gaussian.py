@@ -106,10 +106,10 @@ def ProcessVideoForEyes(video_link    = None,
 
                 # Gaussion maths
                 value1 = -0.5 * np.power(((ld15 - 8.4)/1.55),2) 
-                E1 = ((1/1.55) * (1/2.5066) * np.exp(value1)) + np.exp(-0.205)
+                E1 = ((1/1.55) * (1/2.5066) * np.exp(value1))
                 
                 value2 = -0.5 * np.power(((ld15 - 6.85)/1.52),2)
-                E2 = (1/1.52) * (1/2.5066) * np.exp(value2) 
+                E2 = ((1/1.52) * (1/2.5066) * np.exp(value2)) + np.exp(-0.205)
                 
 
                 
