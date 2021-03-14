@@ -14,6 +14,11 @@ import pafy
 import pandas as pd
 from datetime import datetime
 
+
+def softmax(a,b):
+    return np.exp(a) / (np.exp(a) + np.exp(b))
+
+
 def eye_aspect_ratio(eye):
         data = {}
         # compute the euclidean distances between the two sets of
@@ -111,8 +116,7 @@ def ProcessVideoForEyes(video_link    = None,
                 value2 = -0.5 * np.power(((ld15 - 6.85)/1.52),2)
                 E2 = ((1/1.52) * (1/2.5066) * np.exp(value2)) + np.exp(-0.205)
                 
-
-                
+                p = softmax(E1,E2)
 
                 # compute the convex hull for the left and right eye, then
                 # visualize each of the eyes
@@ -188,10 +192,10 @@ def ProcessVideoForEyes(video_link    = None,
 
 
                 if ear > 0.15:
-                    if E1 > E2:
+                    if p > 0.5:
                         cv2.putText(frame,"ACTIVE DRIVER",(10,100),cv2.FONT_HERSHEY_SIMPLEX, 0.7, (50, 0, 255), 2)
-                    if E2 >= E1:
-                        cv2.putText(frame,f"DIZZY DRIVER : {E2}",(10,100),cv2.FONT_HERSHEY_SIMPLEX, 0.7, (50, 0, 255), 2)    
+                    if p <= 0.5:
+                        cv2.putText(frame,f"DIZZY DRIVER : {1-p}",(10,100),cv2.FONT_HERSHEY_SIMPLEX, 0.7, (50, 0, 255), 2)    
                     # cv2.putText(frame, "Blinks: {}".format(TOTAL), (10, 30),
                     #             cv2.FONT_HERSHEY_SIMPLEX, 0.7, (50, 0, 255), 2)
                     cv2.putText(frame, "EAR: {:.2f}".format(ear), (300, 30),
