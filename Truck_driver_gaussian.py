@@ -114,7 +114,7 @@ def ProcessVideoForEyes(video_link    = None,
                 E1 = ((1/1.55) * (1/2.5066) * np.exp(value1))
                 
                 value2 = -0.5 * np.power(((ld15 - 6.85)/1.52),2)
-                E2 = ((1/1.52) * (1/2.5066) * np.exp(value2)) + np.exp(-0.205)
+                E2 = ((1/1.52) * (1/2.5066) * np.exp(value2))
                 
                 p = softmax(E1,E2)
 
